@@ -22,7 +22,7 @@ jobs:
         MAJOR_VERSION="${{ github.event.inputs.major_version }}"
         {
           echo 'RAW_VERSIONS<<EOF'
-          curl -s https://spacestation13.github.io/byond-builds/${MAJOR_VERSION}/
+          curl -s https://byond-builds.dm-lang.org/${MAJOR_VERSION}/
           echo
           echo EOF
         } >> "$GITHUB_ENV"

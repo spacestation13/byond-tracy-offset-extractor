@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PAGES_BASE: https://sovexe.github.io/byond-tracy-offset-extractor
-      BUILDS_BASE: https://spacestation13.github.io/byond-builds
+      BUILDS_BASE: https://byond-builds.dm-lang.org
       MIN_MAJOR: "515"
       CHUNK_SIZE: "15"
     outputs:
