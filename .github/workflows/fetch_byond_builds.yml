@@ -26,7 +26,7 @@ jobs:
       count:  ${{ steps.finalize.outputs.count }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Tools
         run: |
@@ -179,10 +179,10 @@ jobs:
       name: github-pages
     steps:
       - name: Checkout repo (for pages/index.html and any other assets)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download ALL fragments
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: site-fragments-*
           merge-multiple: true
@@ -253,10 +253,10 @@ jobs:
           cp -R pages/* public/ || true
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: public
 
       - name: Deploy to GitHub Pages
         id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
