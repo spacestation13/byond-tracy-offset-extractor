@@ -258,9 +258,6 @@ curl -sSL https://spacestation13.github.io/byond-tracy-offset-extractor/index.js
           });
         });
 
-        // footer year
-        document.getElementById('year').textContent = new Date().getFullYear();
-
       } catch (e) {
         document.getElementById('versRows').innerHTML = `<tr><td colspan="3" class="muted">Failed to load: ${e}</td></tr>`;
       }
