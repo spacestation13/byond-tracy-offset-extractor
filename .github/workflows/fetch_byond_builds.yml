@@ -3,7 +3,13 @@ name: Fetch BYOND Builds
 on:
   schedule:
     - cron: "0 */1 * * *"   # hourly
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force_publish:
+        description: 'Ignore early exit check and force publish anyways'
+        required: false
+        default: false
+        type: boolean
 
 # Ensure only one run publishes at a time; cancel overlapping runs
 concurrency:
@@ -49,6 +55,13 @@ jobs:
         id: early
         run: |
           set -euo pipefail
+          FORCE_PUBLISH="${{ github.event_name == 'workflow_dispatch' && github.event.inputs.force_publish == 'true' }}"
+          if [ "$FORCE_PUBLISH" = "true" ]; then
+            echo "Manual force publish - bypassing early exit."
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           UPSTREAM_VER="${{ steps.majors.outputs.upstream_ver }}"
           MAJOR="${UPSTREAM_VER%%.*}"
 
