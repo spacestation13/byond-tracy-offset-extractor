@@ -47,6 +47,7 @@ jobs:
           echo "BYOND_VERSION=$BYOND_VERSION" >> "$GITHUB_ENV"
 
       - name: Download BYOND
+        id: download
         run: |
           set -euo pipefail
           MAJOR_VERSION=$(echo "$BYOND_VERSION" | cut -d'.' -f1)
@@ -55,11 +56,20 @@ jobs:
           else
             DOWNLOAD_URL="https://byond-builds.dm-lang.org/${MAJOR_VERSION}/${BYOND_VERSION}_byond_linux.zip"
           fi
+
+          if ! curl -fsI "$DOWNLOAD_URL" >/dev/null 2>&1; then
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping ${BYOND_VERSION} on ${{ matrix.os }} because it does not exist at $DOWNLOAD_URL"
+            exit 0
+          fi
+
+          echo "available=true" >> "$GITHUB_OUTPUT"
           wget "$DOWNLOAD_URL" -O byond.zip
           unzip byond.zip
 
       - name: Determine target file
         id: determine_target
+        if: ${{ steps.download.outputs.available == 'true' }}
         run: |
           if [ "${{ matrix.os }}" = "windows" ]; then
             echo "target_file=byond/bin/byondcore.dll" >> "$GITHUB_OUTPUT"
@@ -69,6 +79,7 @@ jobs:
 
       - name: Determine if old ELF format is needed
         id: determine_elf
+        if: ${{ steps.download.outputs.available == 'true' }}
         run: |
           MINOR_VERSION=$(echo "$BYOND_VERSION" | cut -d'.' -f2)
           if [ "${{ matrix.os }}" = "linux" ] && [ "$MINOR_VERSION" -lt 1644 ]; then
@@ -78,6 +89,7 @@ jobs:
           fi
 
       - name: Run extraction script
+        if: ${{ steps.download.outputs.available == 'true' }}
         run: |
           set -euo pipefail
           if [ "${{ steps.determine_elf.outputs.use_old_elf }}" = "true" ]; then
@@ -87,6 +99,7 @@ jobs:
           fi
 
       - name: Parse curly-brace signatures to JSON
+        if: ${{ steps.download.outputs.available == 'true' }}
         run: |
           set -euo pipefail
 
@@ -123,8 +136,9 @@ jobs:
           ls -l fragments
 
       - name: Upload page fragment
+        if: ${{ steps.download.outputs.available == 'true' }}
         uses: actions/upload-artifact@v7
         with:
-          name: site-fragments-${{ matrix.os }}-${{ env.BYOND_VERSION }}
+          name: site-fragments-${{ matrix.os }}-${{ matrix.byond_version }}
           path: fragments/*.json
           if-no-files-found: ignore
