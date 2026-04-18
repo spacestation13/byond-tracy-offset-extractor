@@ -37,12 +37,11 @@
 <body>
   <header>
     <div class="wrap">
-      <h1>BYOND Signatures – API & Links</h1>
+      <h1>BYOND Signatures - API & Links</h1>
       <div class="muted">
         Static, scraper-friendly JSON endpoints published by GitHub Actions.
         &nbsp;•&nbsp;
-        <a href="https://github.com/sovexe/byond-tracy-offset-extractor">Main repository</a>
-        &nbsp;•&nbsp; Built by <strong>Sovexe</strong>
+        <a href="https://github.com/spacestation13/byond-tracy-offset-extractor">Main repository</a>
       </div>
     </div>
   </header>
@@ -51,12 +50,12 @@
     <section class="card">
       <h3>Primary Endpoints</h3>
       <ul>
-        <li><a href="https://sovexe.github.io/byond-tracy-offset-extractor/data.json">data.json</a> – full dataset (array of items).</li>
-        <li><a href="https://sovexe.github.io/byond-tracy-offset-extractor/index.json">index.json</a> – version list + latest pointers.</li>
-        <li><a href="https://sovexe.github.io/byond-tracy-offset-extractor/latest-linux.json">latest-linux.json</a> – latest Linux.</li>
-        <li><a href="https://sovexe.github.io/byond-tracy-offset-extractor/latest-windows.json">latest-windows.json</a> – latest Windows.</li>
-        <li><code>v/&lt;version&gt;/&lt;platform&gt;.json</code> – per-version files. Example:
-          <a href="https://sovexe.github.io/byond-tracy-offset-extractor/v/516.1666/linux.json">v/516.1666/linux.json</a>
+        <li><a href="https://spacestation13.github.io/byond-tracy-offset-extractor/data.json">data.json</a> - full dataset (array of items).</li>
+        <li><a href="https://spacestation13.github.io/byond-tracy-offset-extractor/index.json">index.json</a> - version list + latest pointers.</li>
+        <li><a href="https://spacestation13.github.io/byond-tracy-offset-extractor/latest-linux.json">latest-linux.json</a> - latest Linux.</li>
+        <li><a href="https://spacestation13.github.io/byond-tracy-offset-extractor/latest-windows.json">latest-windows.json</a> - latest Windows.</li>
+        <li><code>v/&lt;version&gt;/&lt;platform&gt;.json</code> - per-version files. Example:
+          <a href="https://spacestation13.github.io/byond-tracy-offset-extractor/v/516.1666/linux.json">v/516.1666/linux.json</a>
         </li>
       </ul>
       <div class="muted" style="margin-bottom:6px">Schema (per item)</div>
@@ -139,20 +138,20 @@
       <details open>
         <summary><strong>curl + jq (bash)</strong></summary>
         <pre><code># Latest Linux curly-brace line
-curl -sSL https://sovexe.github.io/byond-tracy-offset-extractor/latest-linux.json \
+curl -sSL https://spacestation13.github.io/byond-tracy-offset-extractor/latest-linux.json \
  | jq -r '.addresses | "{" + (join(", ")) + "}"'
 
 # Fetch a specific version/platform (Windows example)
-curl -sSL https://sovexe.github.io/byond-tracy-offset-extractor/v/516.1666/windows.json | jq .
+curl -sSL https://spacestation13.github.io/byond-tracy-offset-extractor/v/516.1666/windows.json | jq .
 
 # List all versions
-curl -sSL https://sovexe.github.io/byond-tracy-offset-extractor/index.json | jq -r '.versions[]'
+curl -sSL https://spacestation13.github.io/byond-tracy-offset-extractor/index.json | jq -r '.versions[]'
 </code></pre>
       </details>
 
       <details>
         <summary><strong>PowerShell</strong></summary>
-        <pre><code>$j = Invoke-RestMethod -Uri "https://sovexe.github.io/byond-tracy-offset-extractor/data.json"
+        <pre><code>$j = Invoke-RestMethod -Uri "https://spacestation13.github.io/byond-tracy-offset-extractor/data.json"
 ($j | Where-Object { $_.platform -eq 'linux' } | Sort-Object {
   $_.version.Split('.') | ForEach-Object {[int]$_}
 } | Select-Object -Last 1).addresses -join ', '
@@ -163,22 +162,16 @@ curl -sSL https://sovexe.github.io/byond-tracy-offset-extractor/index.json | jq 
         <summary><strong>GitHub Actions (shell)</strong></summary>
         <pre><code>- name: Fetch latest linux curly-brace line
   run: |
-    curl -sSL https://sovexe.github.io/byond-tracy-offset-extractor/latest-linux.json \
+    curl -sSL https://spacestation13.github.io/byond-tracy-offset-extractor/latest-linux.json \
       | jq -r '.addresses | "{" + (join(", ")) + "}"'
 
 - name: Use a specific version/platform (example)
   run: |
-    curl -sSL https://sovexe.github.io/byond-tracy-offset-extractor/v/516.1666/linux.json \
+    curl -sSL https://spacestation13.github.io/byond-tracy-offset-extractor/v/516.1666/linux.json \
       | jq -r '.addresses | "{" + (join(", ")) + "}"'
 </code></pre>
       </details>
     </section>
-
-    <footer class="wrap">
-      <div class="muted">
-        © <span id="year"></span> Sovexe — <a href="https://github.com/sovexe/byond-tracy-offset-extractor">github.com/sovexe/byond-tracy-offset-extractor</a>
-      </div>
-    </footer>
   </main>
 
   <script>
