@@ -2,7 +2,7 @@ name: Fetch BYOND Builds
 
 on:
   schedule:
-    - cron: "0 */1 * * *"   # hourly
+    - cron: "0 20 * * *"   # daily
   workflow_dispatch:
     inputs:
       force_publish:
