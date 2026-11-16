@@ -265,11 +265,16 @@ jobs:
           mkdir -p public
           cp -R pages/* public/ || true
 
+      # Artifacts are scoped to the run, not the attempt: a re-run would add a second
+      # "github-pages" artifact and deploy-pages refuses to choose between them.
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
+          name: github-pages-${{ github.run_attempt }}
           path: public
 
       - name: Deploy to GitHub Pages
         id: deploy
         uses: actions/deploy-pages@v5
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
